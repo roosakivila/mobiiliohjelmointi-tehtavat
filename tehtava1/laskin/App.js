@@ -32,8 +32,8 @@ export default function App() {
         value={number2}
         keyboardType="numeric" />
       <View styles={styles.container} style={{ flexDirection: 'row', gap: 10 }}>
-        <Button style={styles.button} title="+" onPress={handleAdd} />
-        <Button style={styles.button} title="-" onPress={handleSubtract} />
+        <Button title="+" onPress={handleAdd} />
+        <Button title="-" onPress={handleSubtract} />
       </View>
       <StatusBar style="auto" />
     </View>
