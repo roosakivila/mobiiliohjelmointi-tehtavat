@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 import { useState, useEffect } from 'react';
+import { Appbar, PaperProvider, TextInput, Button, List, IconButton } from 'react-native-paper';
 
 
 export default function App() {
@@ -55,34 +56,45 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
+      <PaperProvider>
+      <Appbar.Header
+      mode='center-aligned'
+      >
+        <Appbar.Content title="Shopping List" />
+      </Appbar.Header>
+      <TextInput 
+      mode='outlined'
         onChangeText={product => setProduct(product)}
         value={product}
-        placeholder='Product'
+        label='Product'
+        style={styles.input}
       />
       <TextInput
-        style={styles.input}
+      mode='outlined'
         onChangeText={amount => setAmount(amount)}
         value={amount}
-        placeholder='Amount'
+        label='Amount'
+        style={styles.input}
       />
 
-      <Button title='Save' onPress={saveProduct} />
+      <Button mode='contained' icon="content-save-outline" style={styles.button} onPress={saveProduct}>Save</Button>
       <FlatList
-        ListHeaderComponent={<Text style={styles.header}>Shopping List</Text>}
+       data={products}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) =>
-          <View style={styles.item}>
-            <Text>{item.product},</Text>
-            <Text> {item.amount} </Text>
-            <Text style={{ color: '#ff0000' }} onPress={() => deleteItem(item.id)}> bought</Text>
-          </View>
-        }
-        data={products}
-      />
-    </View>
+           <List.Item 
+            title={item.product}
+            description={item.amount}
+            right={props => 
+             <IconButton 
+             {...props}
+             icon="delete"
+             iconColor="red"
+             onPress={() => deleteItem(item.id)}/>}
+            /> }
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+    </PaperProvider>
   );
 }
 
@@ -95,22 +107,20 @@ const styles = StyleSheet.create({
     paddingTop: 100,
   },
   input: {
-    fontSize: 18,
-    width: 200,
+    fontSize: 15,
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'black',
     marginBottom: 10,
-    padding: 10,
+    marginRight: 10,
+    marginLeft: 10,
   },
-  item: {
-    flexDirection: 'row',
+   separator: {
+    height: 1,
+    backgroundColor: '#ccc',
+   },
+   button: {
+    width: 150,
+    justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    padding: 10,
-  },
+    alignSelf: 'center',
+   },
 });
